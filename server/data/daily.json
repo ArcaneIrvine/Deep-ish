@@ -1,0 +1,20 @@
+{
+  "entries": {
+    "2026-08-05": {
+      "category": "Philosophy",
+      "topic": "The Ship of Theseus",
+      "difficulty": 1,
+      "overview": "The Ship of Theseus is a thought experiment that explores the nature of identity over time. Imagine a wooden ship belonging to the mythical hero Theseus. As the ship sails over decades, its wooden planks rot and are replaced one by one with new timber. Eventually, every single original piece of wood has been removed and replaced. Is the resulting vessel still the same ship that left port? To complicate matters further, suppose someone collects all the discarded original planks and reassembles them into a second ship. Which vessel holds the true identity of the Ship of Theseus? This philosophical puzzle forces us to examine what constitutes an object's essence: its physical material, its structural arrangement, its functional purpose, or its continuous history through space and time.",
+      "key_ideas": [
+        "Identity persistence: Questioning how an object remains the same entity despite complete material replacement.",
+        "Material versus continuity: Comparing whether identity relies on physical matter or uninterrupted historical trajectory.",
+        "Personal identity application: Extending the paradox to human beings, whose cells continuously regenerate across a lifetime."
+      ],
+      "beginner_resource": "'The Ship of Theseus' (Wireless Philosophy video essay by Alvin Goldman)",
+      "advanced_resource": "'Identity and Necessity' (Essay in 'Identity and Individuation' by Saul Kripke)",
+      "estimated_minutes": 20,
+      "completed": false,
+      "rerolled": true
+    }
+  }
+}

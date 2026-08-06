@@ -1,0 +1,8 @@
+{
+  "appId": "com.deepish.app",
+  "appName": "Deep-ish",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https"
+  }
+}

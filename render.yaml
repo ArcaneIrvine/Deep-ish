@@ -1,0 +1,40 @@
+services:
+  - type: web
+    name: deep-ish
+    runtime: node
+    plan: free
+    buildCommand: >
+      npm install --prefix server &&
+      npm install --prefix client &&
+      npm run build --prefix client
+    startCommand: node server/index.js
+    envVars:
+      # Binds the server to all interfaces so Render can route traffic to
+      # it — the app itself still requires sign-in either way.
+      - key: HOST
+        value: 0.0.0.0
+
+      # Set in the Render dashboard (Environment tab) after first deploy —
+      # left blank here on purpose so no secret ends up committed to git.
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_MODEL
+        value: gemini-3.6-flash
+      - key: GEMINI_EMBED_MODEL
+        value: gemini-embedding-001
+
+      # Server-side Supabase (service role key is secret — server only).
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: SUPABASE_ANON_KEY
+        sync: false
+
+      # Browser-side Supabase (Vite bakes these into client/dist at build
+      # time — same values as above, just VITE_-prefixed so Vite picks them
+      # up. The anon key is safe to expose; it's the same one used above).
+      - key: VITE_SUPABASE_URL
+        sync: false
+      - key: VITE_SUPABASE_ANON_KEY
+        sync: false

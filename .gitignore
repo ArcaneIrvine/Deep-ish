@@ -1,0 +1,8 @@
+node_modules/
+client/dist/
+client/.env
+server/.env
+android-app/node_modules/
+android-app/dist/
+android-app/android/
+android-app/.env

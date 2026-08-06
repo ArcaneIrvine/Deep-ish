@@ -1,0 +1,14 @@
+{
+  "name": "deep-ish",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "setup": "npm install --prefix server && npm install --prefix client",
+    "build": "npm run build --prefix client",
+    "start": "npm run build --prefix client && npm run dev --prefix server",
+    "dev": "concurrently -n server,client -c blue,magenta \"npm run dev --prefix server\" \"npm run dev --prefix client\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
