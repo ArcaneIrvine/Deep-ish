@@ -15,6 +15,7 @@ import {
   rerollDailyEntry,
   getStreak,
   todayStr,
+  checkAndIncrementUsage,
 } from "./storage.js";
 import { getRecommendation, embedText, getModelInfo } from "./llm.js";
 import {
@@ -29,6 +30,9 @@ app.use(cors());
 app.use(express.json());
 
 const PORT = process.env.PORT || 5174;
+// Defaults to localhost-only, matching the desktop launcher's original
+// intent (no LAN exposure). Hosting platforms like Render set HOST=0.0.0.0
+// explicitly (see render.yaml) so the service is actually reachable.
 const HOST = process.env.HOST || "127.0.0.1";
 
 // Every /api/* route below (except /mentor/status, which is static info) is
@@ -64,6 +68,7 @@ app.get("/api/daily", requireAuth, async (req, res) => {
     const today = todayStr();
     let entry = await getDailyEntry(userId, today);
     if (!entry) {
+      await checkAndIncrementUsage(userId);
       const history = await getHistory(userId);
       const userPrompt = buildContinuePrompt(history);
       const recommendation = await getRecommendation(SYSTEM_PROMPT, userPrompt, history);
@@ -122,6 +127,7 @@ app.post("/api/daily/reroll", requireAuth, async (req, res) => {
       return res.status(400).json({ error: "You've already used today's reroll." });
     }
 
+    await checkAndIncrementUsage(userId);
     const history = await getHistory(userId);
     const userPrompt = buildContinuePrompt(history);
     const recommendation = await getRecommendation(SYSTEM_PROMPT, userPrompt, history, [
@@ -164,6 +170,7 @@ app.post("/api/mentor/recommend", requireAuth, async (req, res) => {
     else if (mode === "deepen") userPrompt = buildDeepenPrompt(history, category);
     else return res.status(400).json({ error: "Invalid mode. Use surprise | deepen." });
 
+    await checkAndIncrementUsage(userId);
     const recommendation = await getRecommendation(SYSTEM_PROMPT, userPrompt, history);
     res.json({ recommendation });
   } catch (err) {

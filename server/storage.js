@@ -181,3 +181,31 @@ export async function getStreak(userId) {
   }
   return count;
 }
+
+// ---------- Daily Gemini usage cap (per user) ----------
+//
+// Protects the shared Gemini key from being run up by any one account —
+// especially relevant now that signups are public. Throws once a user hits
+// their daily cap; callers should call this right before any Gemini call.
+const DAILY_GEMINI_LIMIT = 20;
+
+export async function checkAndIncrementUsage(userId) {
+  const date = todayStr();
+  const { data: existing, error: selErr } = await supabaseAdmin
+    .from("api_usage")
+    .select("count")
+    .eq("user_id", userId)
+    .eq("date", date)
+    .maybeSingle();
+  if (selErr) throw new Error(selErr.message);
+
+  const count = existing?.count ?? 0;
+  if (count >= DAILY_GEMINI_LIMIT) {
+    throw new Error(`Daily limit reached (${DAILY_GEMINI_LIMIT} AI requests). Try again tomorrow.`);
+  }
+
+  const { error: upErr } = await supabaseAdmin
+    .from("api_usage")
+    .upsert({ user_id: userId, date, count: count + 1 }, { onConflict: "user_id,date" });
+  if (upErr) throw new Error(upErr.message);
+}
