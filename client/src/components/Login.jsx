@@ -8,6 +8,25 @@ export default function Login() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
   const [checkEmail, setCheckEmail] = useState(false);
+  const [googleBusy, setGoogleBusy] = useState(false);
+
+  async function handleGoogle() {
+    setError(null);
+    setGoogleBusy(true);
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: { redirectTo: window.location.origin },
+      });
+      if (error) throw error;
+      // On success the browser navigates away to Google, then back — no
+      // further code runs here; App.jsx's onAuthStateChange picks up the
+      // new session once the redirect completes.
+    } catch (err) {
+      setError(err.message || "Something went wrong.");
+      setGoogleBusy(false);
+    }
+  }
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -75,6 +94,19 @@ export default function Login() {
           </p>
 
           {error && <p className="state-message error">{error}</p>}
+
+          <div className="reset-row" style={{ justifyContent: "center", marginBottom: 20 }}>
+            <button className="reroll-btn" onClick={handleGoogle} disabled={googleBusy} type="button">
+              {googleBusy ? "Redirecting…" : "Continue with Google"}
+            </button>
+          </div>
+
+          <p
+            className="section-sub"
+            style={{ textAlign: "center", margin: "0 0 20px", textTransform: "uppercase", fontSize: "0.7rem", letterSpacing: "0.08em" }}
+          >
+            or {mode === "signin" ? "sign in" : "sign up"} with email
+          </p>
 
           <form onSubmit={handleSubmit}>
             <div className="deepen-picker" style={{ marginBottom: 20 }}>

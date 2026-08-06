@@ -601,6 +601,7 @@
   cursor: pointer;
   text-align: left;
   font-family: var(--font-display);
+  color: var(--text);
 }
 
 .history-category-row:hover {
@@ -610,6 +611,7 @@
 .history-category-name {
   font-size: 0.98rem;
   font-weight: 500;
+  color: var(--text);
 }
 
 .history-category-count {
@@ -649,6 +651,7 @@
   cursor: pointer;
   text-align: left;
   font-family: inherit;
+  color: var(--text);
 }
 
 .history-item-row:hover .history-topic {

@@ -66,3 +66,46 @@ First launch of either app now shows a sign-in/create-account screen
 (email + password). Create an account on one device, sign in with the same
 email/password on the other — same streak, same history, kept in sync via
 the shared database.
+
+## Google sign-in (optional, web app only)
+
+The desktop/hosted web app's Login screen already has a "Continue with
+Google" button wired up in the code — it just needs the provider turned on
+in Supabase, plus a Google Cloud OAuth client. (The Android app doesn't use
+this — email/password only there, by design.)
+
+### 1. Create a Google OAuth client
+
+[Google Cloud Console](https://console.cloud.google.com) → APIs & Services
+→ Credentials → **Create Credentials → OAuth client ID** → Application
+type: **Web application**.
+
+- **Authorized JavaScript origins** — add every URL you'll actually load
+  the app from, e.g.:
+  - `http://localhost:5173` (local dev)
+  - `https://deep-ish.onrender.com` (or whatever your hosted URL is)
+- **Authorized redirect URIs** — add exactly one:
+  - `https://xxxxx.supabase.co/auth/v1/callback` (your Supabase project's
+    URL + `/auth/v1/callback` — find your project URL under Settings → API)
+
+Save, then copy the generated **Client ID** and **Client secret**.
+
+### 2. Enable the provider in Supabase
+
+Dashboard → **Authentication → Providers → Google** → toggle on → paste in
+the Client ID and Client secret from step 1 → Save.
+
+### 3. Allow your app's URLs to receive the redirect
+
+Dashboard → **Authentication → URL Configuration → Redirect URLs** → add
+the same URLs you used as JavaScript origins above (`http://localhost:5173`,
+your Render URL, etc.). Supabase blocks redirects to anything not on this
+list, regardless of what the Google Cloud client allows.
+
+### 4. Test it
+
+Reload the web app (local dev or hosted) → Login screen → **Continue with
+Google** → pick an account → you should land back in the app, signed in.
+If it errors or bounces back to the login screen, it's almost always one of
+the URLs above not matching exactly (including `http` vs `https`, and no
+trailing slash).
