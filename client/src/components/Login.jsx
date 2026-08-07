@@ -5,32 +5,20 @@ export default function Login() {
   const [mode, setMode] = useState("signin"); // "signin" | "signup"
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
   const [checkEmail, setCheckEmail] = useState(false);
-  const [googleBusy, setGoogleBusy] = useState(false);
-
-  async function handleGoogle() {
-    setError(null);
-    setGoogleBusy(true);
-    try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: { redirectTo: window.location.origin },
-      });
-      if (error) throw error;
-      // On success the browser navigates away to Google, then back — no
-      // further code runs here; App.jsx's onAuthStateChange picks up the
-      // new session once the redirect completes.
-    } catch (err) {
-      setError(err.message || "Something went wrong.");
-      setGoogleBusy(false);
-    }
-  }
 
   async function handleSubmit(e) {
     e.preventDefault();
     setError(null);
+
+    if (mode === "signup" && password !== confirmPassword) {
+      setError("Passwords don't match.");
+      return;
+    }
+
     setBusy(true);
     try {
       if (mode === "signin") {
@@ -48,6 +36,13 @@ export default function Login() {
     }
   }
 
+  function switchMode(next) {
+    setError(null);
+    setPassword("");
+    setConfirmPassword("");
+    setMode(next);
+  }
+
   if (checkEmail) {
     return (
       <div className="app">
@@ -62,7 +57,7 @@ export default function Login() {
                 className="reroll-btn"
                 onClick={() => {
                   setCheckEmail(false);
-                  setMode("signin");
+                  switchMode("signin");
                 }}
               >
                 Back to sign in
@@ -86,27 +81,7 @@ export default function Login() {
       </header>
       <main className="app-main">
         <section>
-          <h2 className="section-title">{mode === "signin" ? "Sign in" : "Create account"}</h2>
-          <p className="section-sub">
-            {mode === "signin"
-              ? "Sign in to sync your streak and history across devices."
-              : "One account, synced between desktop and your phone."}
-          </p>
-
           {error && <p className="state-message error">{error}</p>}
-
-          <div className="reset-row" style={{ justifyContent: "center", marginBottom: 20 }}>
-            <button className="reroll-btn" onClick={handleGoogle} disabled={googleBusy} type="button">
-              {googleBusy ? "Redirecting…" : "Continue with Google"}
-            </button>
-          </div>
-
-          <p
-            className="section-sub"
-            style={{ textAlign: "center", margin: "0 0 20px", textTransform: "uppercase", fontSize: "0.7rem", letterSpacing: "0.08em" }}
-          >
-            or {mode === "signin" ? "sign in" : "sign up"} with email
-          </p>
 
           <form onSubmit={handleSubmit}>
             <div className="deepen-picker" style={{ marginBottom: 20 }}>
@@ -129,6 +104,21 @@ export default function Login() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
+              {mode === "signup" && (
+                <>
+                  <div className="rec-block-label" style={{ marginTop: 14 }}>
+                    Confirm password
+                  </div>
+                  <input
+                    type="password"
+                    required
+                    minLength={6}
+                    autoComplete="new-password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                  />
+                </>
+              )}
             </div>
 
             <div className="reset-row">
@@ -143,10 +133,7 @@ export default function Login() {
             <button
               className="reroll-btn"
               style={{ display: "inline", padding: "4px 10px" }}
-              onClick={() => {
-                setError(null);
-                setMode(mode === "signin" ? "signup" : "signin");
-              }}
+              onClick={() => switchMode(mode === "signin" ? "signup" : "signin")}
             >
               {mode === "signin" ? "Create an account" : "Sign in"}
             </button>
