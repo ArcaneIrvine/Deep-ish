@@ -187,7 +187,7 @@ export async function getStreak(userId) {
 // Protects the shared Gemini key from being run up by any one account —
 // especially relevant now that signups are public. Throws once a user hits
 // their daily cap; callers should call this right before any Gemini call.
-const DAILY_GEMINI_LIMIT = 5;
+const DAILY_GEMINI_LIMIT = 3;
 
 export async function checkAndIncrementUsage(userId) {
   const date = todayStr();

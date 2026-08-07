@@ -8,13 +8,21 @@ async function authHeaders() {
   return token ? { Authorization: `Bearer ${token}` } : {};
 }
 
-async function request(path, options) {
+async function request(path, options, retried = false) {
   const res = await fetch(`${BASE}${path}`, {
     headers: { "Content-Type": "application/json", ...(await authHeaders()) },
     ...options,
   });
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
+    // A token can very briefly fail validation right after sign-in (e.g. a
+    // transient clock-skew check on a freshly-issued JWT) — refreshing the
+    // session mints a new token and clears it, same as a manual page
+    // reload would, but automatically and without the user noticing.
+    if (res.status === 401 && !retried) {
+      await supabase.auth.refreshSession();
+      return request(path, options, true);
+    }
     throw new Error(data.error || `Request failed: ${res.status}`);
   }
   return data;
