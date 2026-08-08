@@ -3,6 +3,8 @@ import TodayTopic from "./components/TodayTopic.jsx";
 import AIMentor from "./components/AIMentor.jsx";
 import HistoryPanel from "./components/HistoryPanel.jsx";
 import Login from "./components/Login.jsx";
+import TabBar from "./components/TabBar.jsx";
+import StatsTab from "./components/StatsTab.jsx";
 import { supabase } from "./lib/supabaseClient.js";
 import "./App.css";
 
@@ -37,6 +39,7 @@ function SignOutIcon() {
 export default function App() {
   const [showHistory, setShowHistory] = useState(false);
   const [session, setSession] = useState(undefined); // undefined = still loading
+  const [tab, setTab] = useState("today");
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => setSession(data.session));
@@ -90,9 +93,15 @@ export default function App() {
       </header>
 
       <main className="app-main">
-        <TodayTopic />
-        <hr className="section-divider" />
-        <AIMentor />
+        <TabBar active={tab} onChange={setTab} />
+        {tab === "today" && (
+          <>
+            <TodayTopic />
+            <hr className="section-divider" />
+            <AIMentor />
+          </>
+        )}
+        {tab === "stats" && <StatsTab />}
       </main>
 
       {showHistory && <HistoryPanel onClose={() => setShowHistory(false)} />}

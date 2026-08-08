@@ -16,6 +16,7 @@ import {
   getStreak,
   todayStr,
   checkAndIncrementUsage,
+  getStats,
 } from "./storage.js";
 import { getRecommendation, embedText, getModelInfo } from "./llm.js";
 import {
@@ -151,6 +152,18 @@ app.get("/api/history", requireAuth, async (req, res) => {
   // Embeddings are an internal implementation detail — no reason to ship
   // them to the client.
   res.json({ history: history.map(({ embedding, ...rest }) => rest) });
+});
+
+// ---------- Stats tab ----------
+
+app.get("/api/stats", requireAuth, async (req, res) => {
+  try {
+    const stats = await getStats(req.user.id);
+    res.json(stats);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message || "Couldn't load stats." });
+  }
 });
 
 // ---------- AI Mentor: extra, on-demand content (doesn't touch the streak) ----------

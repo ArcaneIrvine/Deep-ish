@@ -38,6 +38,7 @@ export const api = {
   rerollDaily: () => request("/daily/reroll", { method: "POST" }),
 
   getHistory: () => request("/history"),
+  getStats: () => request("/stats"),
 
   getMentorStatus: () => request("/mentor/status"),
   recommend: (mode, category) =>

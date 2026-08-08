@@ -182,6 +182,51 @@ export async function getStreak(userId) {
   return count;
 }
 
+// ---------- Stats tab ----------
+//
+// Everything here is derived from data that already exists (history +
+// daily_entries) — no new Gemini calls, just different views of it.
+export async function getStats(userId) {
+  const [{ data: dailyRows, error: dErr }, { data: historyRows, error: hErr }] = await Promise.all([
+    supabaseAdmin
+      .from("daily_entries")
+      .select("date, completed")
+      .eq("user_id", userId)
+      .order("date", { ascending: true }),
+    supabaseAdmin.from("history").select("category").eq("user_id", userId),
+  ]);
+  if (dErr) throw new Error(dErr.message);
+  if (hErr) throw new Error(hErr.message);
+
+  const completedDates = new Set((dailyRows || []).filter((r) => r.completed).map((r) => r.date));
+  const sortedCompleted = [...completedDates].sort();
+  let longestStreak = 0;
+  let run = 0;
+  let prevDate = null;
+  for (const date of sortedCompleted) {
+    run = prevDate && addDays(prevDate, 1) === date ? run + 1 : 1;
+    longestStreak = Math.max(longestStreak, run);
+    prevDate = date;
+  }
+
+  const categoryCounts = {};
+  for (const row of historyRows || []) {
+    const cat = row.category || "Other";
+    categoryCounts[cat] = (categoryCounts[cat] || 0) + 1;
+  }
+  const categories = Object.entries(categoryCounts)
+    .sort((a, b) => b[1] - a[1])
+    .map(([category, count]) => ({ category, count }));
+
+  return {
+    totalCompleted: (historyRows || []).length,
+    currentStreak: await getStreak(userId),
+    longestStreak,
+    categories,
+    calendar: (dailyRows || []).map((r) => ({ date: r.date, completed: r.completed })),
+  };
+}
+
 // ---------- Daily Gemini usage cap (per user) ----------
 //
 // Protects the shared Gemini key from being run up by any one account —
