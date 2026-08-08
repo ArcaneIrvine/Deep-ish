@@ -1,26 +1,12 @@
 import { useEffect, useState } from "react";
 import TodayTopic from "./components/TodayTopic.jsx";
 import AIMentor from "./components/AIMentor.jsx";
-import HistoryPanel from "./components/HistoryPanel.jsx";
 import Login from "./components/Login.jsx";
 import TabBar from "./components/TabBar.jsx";
 import StatsTab from "./components/StatsTab.jsx";
+import BrowseTab from "./components/BrowseTab.jsx";
 import { supabase } from "./lib/supabaseClient.js";
 import "./App.css";
-
-function HistoryIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path
-        d="M3 12a9 9 0 1 0 3-6.7M3 4v5h5M12 7v5l3.5 2"
-        stroke="currentColor"
-        strokeWidth="1.6"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
 
 function SignOutIcon() {
   return (
@@ -37,7 +23,6 @@ function SignOutIcon() {
 }
 
 export default function App() {
-  const [showHistory, setShowHistory] = useState(false);
   const [session, setSession] = useState(undefined); // undefined = still loading
   const [tab, setTab] = useState("today");
 
@@ -74,14 +59,6 @@ export default function App() {
           <div className="header-actions">
             <button
               className="history-btn"
-              onClick={() => setShowHistory(true)}
-              aria-label="View learning history"
-              title="Learning history"
-            >
-              <HistoryIcon />
-            </button>
-            <button
-              className="history-btn"
               onClick={() => supabase.auth.signOut()}
               aria-label="Sign out"
               title={`Sign out (${session.user.email})`}
@@ -102,9 +79,8 @@ export default function App() {
           </>
         )}
         {tab === "stats" && <StatsTab />}
+        {tab === "browse" && <BrowseTab />}
       </main>
-
-      {showHistory && <HistoryPanel onClose={() => setShowHistory(false)} />}
     </div>
   );
 }
