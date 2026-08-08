@@ -17,6 +17,8 @@ import {
   todayStr,
   checkAndIncrementUsage,
   getStats,
+  resetUserData,
+  getUsageToday,
 } from "./storage.js";
 import { getRecommendation, embedText, getModelInfo } from "./llm.js";
 import {
@@ -163,6 +165,28 @@ app.get("/api/stats", requireAuth, async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: err.message || "Couldn't load stats." });
+  }
+});
+
+// ---------- Account tab ----------
+
+app.post("/api/account/reset", requireAuth, async (req, res) => {
+  try {
+    await resetUserData(req.user.id);
+    res.json({ ok: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message || "Couldn't reset your data." });
+  }
+});
+
+app.get("/api/account/usage", requireAuth, async (req, res) => {
+  try {
+    const usage = await getUsageToday(req.user.id);
+    res.json(usage);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message || "Couldn't load usage." });
   }
 });
 

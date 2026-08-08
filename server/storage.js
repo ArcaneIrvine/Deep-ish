@@ -254,3 +254,27 @@ export async function checkAndIncrementUsage(userId) {
     .upsert({ user_id: userId, date, count: count + 1 }, { onConflict: "user_id,date" });
   if (upErr) throw new Error(upErr.message);
 }
+
+// ---------- Account tab: reset data ----------
+//
+// Deletes all of a user's history and daily entries. Uses the service role
+// key (bypasses RLS, same as every other function in this file) — there's
+// no equivalent "delete own rows" RLS policy since nothing else needed one.
+export async function resetUserData(userId) {
+  const { error: e1 } = await supabaseAdmin.from("daily_entries").delete().eq("user_id", userId);
+  if (e1) throw new Error(e1.message);
+  const { error: e2 } = await supabaseAdmin.from("history").delete().eq("user_id", userId);
+  if (e2) throw new Error(e2.message);
+}
+
+export async function getUsageToday(userId) {
+  const date = todayStr();
+  const { data, error } = await supabaseAdmin
+    .from("api_usage")
+    .select("count")
+    .eq("user_id", userId)
+    .eq("date", date)
+    .maybeSingle();
+  if (error) throw new Error(error.message);
+  return { count: data?.count ?? 0, limit: DAILY_GEMINI_LIMIT };
+}

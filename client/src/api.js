@@ -39,6 +39,8 @@ export const api = {
 
   getHistory: () => request("/history"),
   getStats: () => request("/stats"),
+  getUsage: () => request("/account/usage"),
+  resetData: () => request("/account/reset", { method: "POST" }),
 
   getMentorStatus: () => request("/mentor/status"),
   recommend: (mode, category) =>

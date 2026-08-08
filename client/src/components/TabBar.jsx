@@ -2,6 +2,7 @@ const TABS = [
   { id: "today", label: "Today" },
   { id: "browse", label: "Browse" },
   { id: "stats", label: "Stats" },
+  { id: "account", label: "Account" },
 ];
 
 export default function TabBar({ active, onChange }) {
