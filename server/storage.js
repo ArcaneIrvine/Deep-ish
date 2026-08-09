@@ -223,7 +223,6 @@ export async function getStats(userId) {
     currentStreak: await getStreak(userId),
     longestStreak,
     categories,
-    calendar: (dailyRows || []).map((r) => ({ date: r.date, completed: r.completed })),
   };
 }
 

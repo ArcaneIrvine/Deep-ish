@@ -111,41 +111,10 @@
   margin: 48px 0;
 }
 
-.streak-row {
+.today-meta-row {
   display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 24px;
-  flex-wrap: wrap;
-}
-
-.streak-badge {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  padding: 8px 16px 8px 12px;
-  flex-shrink: 0;
-}
-
-.streak-badge svg {
-  width: 18px;
-  height: 18px;
-}
-
-.streak-count {
-  font-family: var(--font-display);
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--accent);
-  font-variant-numeric: tabular-nums;
-}
-
-.streak-label {
-  font-size: 0.78rem;
-  color: var(--text-dim);
+  justify-content: flex-end;
+  margin-bottom: 20px;
 }
 
 .reset-timer {
@@ -421,8 +390,40 @@
   font-family: var(--font-display);
   font-size: 1.5rem;
   font-weight: 500;
-  margin: 0 0 18px;
   line-height: 1.25;
+}
+
+.rec-topic-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 0 0 18px;
+}
+
+.copy-topic-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  margin-top: 4px;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text-dim);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.copy-topic-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+.copy-topic-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
 .rec-block {
@@ -755,57 +756,6 @@
   margin-top: 4px;
 }
 
-.calendar-heatmap {
-  display: flex;
-  gap: 3px;
-  overflow-x: auto;
-  padding-bottom: 4px;
-}
-
-.calendar-week {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-
-.calendar-cell {
-  width: 13px;
-  height: 13px;
-  border-radius: 3px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  flex-shrink: 0;
-}
-
-.calendar-cell.attempted {
-  background: var(--sage-dim);
-  border-color: var(--sage);
-}
-
-.calendar-cell.completed {
-  background: var(--accent);
-  border-color: var(--accent);
-}
-
-.calendar-cell.future {
-  background: none;
-  border-color: transparent;
-}
-
-.calendar-legend {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 12px;
-  font-size: 0.72rem;
-  color: var(--text-faint);
-}
-
-.calendar-legend .calendar-cell {
-  width: 11px;
-  height: 11px;
-}
-
 .category-bars {
   display: flex;
   flex-direction: column;
@@ -845,4 +795,35 @@
   font-size: 0.8rem;
   color: var(--text-faint);
   text-align: right;
+}
+
+/* ---------- Account tab ---------- */
+
+.account-identity-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  flex-wrap: wrap;
+}
+
+.account-identity-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.account-email {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  color: var(--text);
+}
+
+.account-usage {
+  font-size: 0.8rem;
+  color: var(--text-dim);
 }

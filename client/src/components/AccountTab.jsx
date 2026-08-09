@@ -63,23 +63,21 @@ export default function AccountTab({ session }) {
 
   return (
     <section>
-      <div className="deepen-picker" style={{ marginBottom: 20 }}>
-        <div className="rec-block-label">Signed in as</div>
-        <p className="section-sub" style={{ marginTop: 6, marginBottom: 0 }}>
-          {session.user.email}
-        </p>
+      <div className="account-identity-card">
+        <div className="account-identity-info">
+          <div className="account-email">{session.user.email}</div>
+          {usage && (
+            <div className="account-usage">
+              AI usage today: {usage.count} of {usage.limit}
+            </div>
+          )}
+        </div>
+        <button className="reroll-btn" onClick={() => supabase.auth.signOut()}>
+          Sign out
+        </button>
       </div>
 
-      {usage && (
-        <div className="deepen-picker" style={{ marginBottom: 20 }}>
-          <div className="rec-block-label">AI usage today</div>
-          <p className="section-sub" style={{ marginTop: 6, marginBottom: 0 }}>
-            {usage.count} of {usage.limit} requests used
-          </p>
-        </div>
-      )}
-
-      <h3 className="section-title" style={{ marginTop: 8 }}>
+      <h3 className="section-title" style={{ marginTop: 32 }}>
         Change password
       </h3>
       {pwError && <p className="state-message error">{pwError}</p>}
@@ -113,15 +111,6 @@ export default function AccountTab({ session }) {
           </button>
         </div>
       </form>
-
-      <h3 className="section-title" style={{ marginTop: 36 }}>
-        Sign out
-      </h3>
-      <div className="reset-row">
-        <button className="reroll-btn" onClick={() => supabase.auth.signOut()}>
-          Sign out
-        </button>
-      </div>
 
       <h3 className="section-title" style={{ marginTop: 36 }}>
         Delete my data
