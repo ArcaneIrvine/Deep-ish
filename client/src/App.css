@@ -387,11 +387,12 @@
   font-size: 1.5rem;
   font-weight: 500;
   line-height: 1.25;
+  margin: 0;
 }
 
 .rec-topic-row {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 10px;
   margin: 0 0 18px;
 }
@@ -402,7 +403,6 @@
   justify-content: center;
   width: 30px;
   height: 30px;
-  margin-top: 4px;
   background: none;
   border: 1px solid var(--border);
   border-radius: 999px;
