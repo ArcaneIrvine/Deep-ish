@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { api } from "../api.js";
 import { supabase } from "../lib/supabaseClient.js";
+import { THEMES, getTheme, setTheme } from "../lib/theme.js";
 
 export default function AccountTab({ session }) {
   const [usage, setUsage] = useState(null);
+  const [theme, setThemeState] = useState(getTheme());
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [pwBusy, setPwBusy] = useState(false);
@@ -61,6 +63,11 @@ export default function AccountTab({ session }) {
     }
   }
 
+  function handleThemeChange(id) {
+    setTheme(id);
+    setThemeState(id);
+  }
+
   return (
     <section>
       <div className="account-identity-card">
@@ -78,6 +85,22 @@ export default function AccountTab({ session }) {
       </div>
 
       <h3 className="section-title" style={{ marginTop: 32 }}>
+        Theme
+      </h3>
+      <div className="theme-picker">
+        {THEMES.map((t) => (
+          <button
+            key={t.id}
+            className={`theme-option${theme === t.id ? " active" : ""}`}
+            onClick={() => handleThemeChange(t.id)}
+          >
+            <span className="theme-swatch" style={{ background: t.swatch }} />
+            {t.label}
+          </button>
+        ))}
+      </div>
+
+      <h3 className="section-title" style={{ marginTop: 36 }}>
         Change password
       </h3>
       {pwError && <p className="state-message error">{pwError}</p>}

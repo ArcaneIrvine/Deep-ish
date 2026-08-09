@@ -7,9 +7,23 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=Cormorant+Garamond:wght@500;600&family=Spectral:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
+    <script>
+      // Applied before React mounts so there's no flash of the wrong theme
+      // on load — reads the saved preference straight from localStorage.
+      // "reading-room" is the default look and has no data-theme attribute
+      // (see index.css), so it's intentionally skipped here.
+      (function () {
+        try {
+          var saved = localStorage.getItem("deepish-theme");
+          if (saved && saved !== "reading-room") {
+            document.documentElement.setAttribute("data-theme", saved);
+          }
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

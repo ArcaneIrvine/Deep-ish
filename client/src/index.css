@@ -1,4 +1,6 @@
 :root {
+  color-scheme: dark;
+
   --bg: #10131a;
   --surface: #171b24;
   --surface-hover: #1d222d;
@@ -19,6 +21,68 @@
   --radius: 10px;
 }
 
+/* ---------- Alternate themes ---------- */
+/* Picked in Account tab, persisted to localStorage (see lib/theme.js).
+   Every rule in App.css already reads these variables — swapping the set
+   on <html data-theme="..."> reskins the whole app, no component changes. */
+
+[data-theme="midnight-study"] {
+  --bg: #090b14;
+  --surface: #0e1220;
+  --surface-hover: #131832;
+  --border: #232c48;
+  --text: #eef1fc;
+  --text-dim: #a8b0cc;
+  --text-faint: #6c7599;
+  --accent: #aab8e8;
+  --accent-dim: rgba(170, 184, 232, 0.14);
+  --accent-line: rgba(170, 184, 232, 0.35);
+  --sage: #7fb8a0;
+  --sage-dim: rgba(127, 184, 160, 0.14);
+  --danger: #c97f8f;
+  --font-display: "Cormorant Garamond", Georgia, serif;
+  --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --radius: 6px;
+}
+
+[data-theme="dark-academia"] {
+  --bg: #1b130f;
+  --surface: #241a15;
+  --surface-hover: #2c2019;
+  --border: #3d2c20;
+  --text: #ecd9c4;
+  --text-dim: #bba88f;
+  --text-faint: #8a7864;
+  --accent: #c1854f;
+  --accent-dim: rgba(193, 133, 79, 0.14);
+  --accent-line: rgba(193, 133, 79, 0.35);
+  --sage: #8fae7f;
+  --sage-dim: rgba(143, 174, 127, 0.14);
+  --danger: #c2685a;
+  --font-display: "Cormorant Garamond", Georgia, serif;
+  --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --radius: 3px;
+}
+
+[data-theme="archive"] {
+  --bg: #101018;
+  --surface: #181822;
+  --surface-hover: #1e1e2a;
+  --border: #2c2c3c;
+  --text: #e6e6f0;
+  --text-dim: #9d9dae;
+  --text-faint: #66667a;
+  --accent: #a8556b;
+  --accent-dim: rgba(168, 85, 107, 0.14);
+  --accent-line: rgba(168, 85, 107, 0.35);
+  --sage: #7fae8f;
+  --sage-dim: rgba(127, 174, 143, 0.14);
+  --danger: #c2685a;
+  --font-display: "Spectral", Georgia, serif;
+  --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --radius: 3px;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -34,16 +98,18 @@ body {
   color: var(--text);
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
-  background-image: radial-gradient(
-    circle at 15% 0%,
-    rgba(216, 162, 74, 0.06),
-    transparent 45%
-  );
+  background-image: radial-gradient(circle at 15% 0%, var(--accent-dim), transparent 45%);
   background-attachment: fixed;
 }
 
 button {
   font-family: inherit;
+  -webkit-appearance: none;
+  appearance: none;
+  background: none;
+  border: none;
+  color: inherit;
+  margin: 0;
 }
 
 ::selection {
