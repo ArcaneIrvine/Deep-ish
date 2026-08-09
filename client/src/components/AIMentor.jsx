@@ -2,8 +2,6 @@ import { useEffect, useMemo, useState } from "react";
 import { api } from "../api.js";
 import RecommendationCard from "./RecommendationCard.jsx";
 
-const PALETTE = ["#d8a24a", "#7fa98b", "#8f9fd8", "#c9705f", "#9a7fd8", "#5fb4c9", "#c98fb0"];
-
 // Always offered in the Deepen picker, whether or not you've touched them
 // yet — this is the standing menu of disciplines, not just ones with history.
 const BASE_CATEGORIES = [
@@ -15,11 +13,6 @@ const BASE_CATEGORIES = [
   "Literature",
   "Politics",
 ];
-
-function colorForCategory(category, order) {
-  const idx = order.indexOf(category);
-  return PALETTE[idx % PALETTE.length];
-}
 
 export default function AIMentor() {
   const [history, setHistory] = useState(null);
@@ -43,13 +36,6 @@ export default function AIMentor() {
     const seen = [];
     for (const h of history) if (!seen.includes(h.category)) seen.push(h.category);
     return seen;
-  }, [history]);
-
-  const categoryCounts = useMemo(() => {
-    if (!history) return [];
-    const counts = {};
-    for (const h of history) counts[h.category] = (counts[h.category] || 0) + 1;
-    return Object.entries(counts);
   }, [history]);
 
   // The full menu: the standing disciplines, plus anything Surprise Me has
@@ -88,42 +74,12 @@ export default function AIMentor() {
     }
   }
 
-  const hasHistory = history && history.length > 0;
-
   return (
     <section>
       <h2 className="section-title">Explore more</h2>
       <p className="section-sub">
         Optional extra content, on top of today's topic
       </p>
-
-      {hasHistory && (
-        <>
-          <div className="balance-bar">
-            {categoryCounts.map(([cat, count]) => (
-              <div
-                key={cat}
-                className="balance-segment"
-                style={{
-                  width: `${(count / history.length) * 100}%`,
-                  background: colorForCategory(cat, categoryOrder),
-                }}
-              />
-            ))}
-          </div>
-          <div className="balance-legend">
-            {categoryCounts.map(([cat, count]) => (
-              <div className="balance-legend-item" key={cat}>
-                <span
-                  className="balance-swatch"
-                  style={{ background: colorForCategory(cat, categoryOrder) }}
-                />
-                {cat} ({count})
-              </div>
-            ))}
-          </div>
-        </>
-      )}
 
       <div className="mentor-actions">
         <button

@@ -111,10 +111,41 @@
   margin: 48px 0;
 }
 
-.today-meta-row {
+.streak-row {
   display: flex;
-  justify-content: flex-end;
-  margin-bottom: 20px;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.streak-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 8px 16px 8px 12px;
+  flex-shrink: 0;
+}
+
+.streak-badge svg {
+  width: 18px;
+  height: 18px;
+}
+
+.streak-count {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.streak-label {
+  font-size: 0.78rem;
+  color: var(--text-dim);
 }
 
 .reset-timer {
@@ -180,41 +211,6 @@
 }
 
 /* ---------- AI Mentor ---------- */
-
-.balance-bar {
-  display: flex;
-  height: 6px;
-  border-radius: 4px;
-  overflow: hidden;
-  background: var(--surface);
-  margin-bottom: 8px;
-}
-
-.balance-segment {
-  height: 100%;
-}
-
-.balance-legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-bottom: 32px;
-}
-
-.balance-legend-item {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.75rem;
-  color: var(--text-dim);
-}
-
-.balance-swatch {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
 
 .mentor-actions {
   display: grid;

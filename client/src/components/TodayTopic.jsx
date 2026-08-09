@@ -3,6 +3,20 @@ import { api } from "../api.js";
 import RecommendationCard from "./RecommendationCard.jsx";
 import ResetTimer from "./ResetTimer.jsx";
 
+function FlameIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M12 2c1 3-3 4-3 8a3 3 0 006 0c1.5 1 2 2.8 2 4.2A5.2 5.2 0 0112 19.4a5.2 5.2 0 01-5-5.2C7 10 9 8 9 8s.2 3 2 3c1.3 0 1-2 1-4 0-2-1-4-1-4z"
+        stroke="var(--accent)"
+        strokeWidth="1.4"
+        fill="var(--accent-dim)"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 export default function TodayTopic() {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
@@ -64,12 +78,17 @@ export default function TodayTopic() {
   if (error && !data) return <p className="state-message error">{error}</p>;
   if (!data) return null;
 
-  const { entry } = data;
+  const { entry, streak } = data;
   const canReroll = !entry.completed && !entry.rerolled;
 
   return (
     <section>
-      <div className="today-meta-row">
+      <div className="streak-row">
+        <div className="streak-badge">
+          <FlameIcon />
+          <span className="streak-count">{streak}</span>
+          <span className="streak-label">day streak</span>
+        </div>
         <ResetTimer onReset={load} />
       </div>
 
